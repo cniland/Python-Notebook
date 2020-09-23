@@ -1,0 +1,47 @@
+#Analyzing US Economic Data and Building a Dashboard
+
+#Defining the Function to Make a Dashboard
+
+import pandas as pd
+from bokeh.plotting import figure, output_file, show,output_notebook
+output_notebook()
+
+
+
+def make_dashboard(x, gdp_change, unemployment, title, file_name):
+    output_file(file_name)
+    p = figure(title=title, x_axis_label='year', y_axis_label='%')
+    p.line(x.squeeze(), gdp_change.squeeze(), color="firebrick", line_width=4, legend="% GDP change")
+    p.line(x.squeeze(), unemployment.squeeze(), line_width=4, legend="% unemployed")
+    show(p)
+
+#Create a dataframe that contains the GDP data and display the first five rows of the dataframe
+
+df=pd.read_csv(links["GDP"])
+df.head()
+
+#Create a dataframe that contains the unemployment data
+
+df1=pd.read_csv(links["unemployment"])
+df1.head()
+
+#Display a dataframe where unemployment was greater than 8.5%
+
+df2=df[df1['unemployment']>8.5]
+print(df2)
+
+#Use the function make_dashboard to make a dashboard
+
+df=pd.read_csv(links["GDP"])
+x = df.loc[:, ['date']]
+
+gdp_change = df.loc[:, ['change-current']]
+
+df1=pd.read_csv(links["unemployment"])
+unemployment = df1.loc[:, ['unemployment']]
+
+title = "US GDP and Unemployment by Year"
+
+file_name = "index.html"
+
+make_dashboard(x=x, gdp_change=gdp_change, unemployment=unemployment, title=title, file_name=file_name)
